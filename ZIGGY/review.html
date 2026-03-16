@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ziggy - Food Ordering Website</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
+
+    <!-- font awesome cdn link  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- custom css file link  -->
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+            .popup {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            }
+            .popup-content {
+            font-size: medium;
+            background: #fff;
+            padding: 20px;
+            margin: 10% auto;
+            width: 300px;
+            border-radius: 10px;
+            text-align: center;
+            }
+            .stars i {
+            font-size: 24px;
+            color: gray;
+            cursor: pointer;
+            }
+            .stars i.selected {
+            color: rgb(36, 130, 35);
+            }
+            .close {
+            float: right;
+            cursor: pointer;
+            font-size: 20px;
+            }
+            textarea {
+            width: 100%;
+            height: 70px;
+            margin: 10px 0;
+            padding: 8px;
+            }
+            .review-section {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 10px;
+            }
+            .review-box {
+            background: #fff;
+            padding: 10px;
+            margin: 10px 0;
+            border-left: 4px solid orange;
+            }
+
+    </style>
+</head>
+<body>
+    
+<!-- Header Section Starts -->
+<header class="header">
+  <a href="#" class="logo"> <i class="fas fa-shopping-basket"></i> Ziggy </a>
+
+  <nav class="navbar">
+    <a href="index.html">home</a>
+    <a href="categories.html">categories</a>
+    <a href="products.html">products</a>
+    <a href="review.html">review</a>
+    <a href="recipes.html">recipes</a>
+  </nav>
+
+  <div class="icons">
+    <div class="fas fa-bars" id="menu-btn"></div>
+    <div class="fas fa-search" id="search-btn"></div>
+    <a href="cart.html"><div class="fas fa-shopping-cart" id="cart-btn"></div></a>
+    <div class="fas fa-user" id="login-btn"></div> 
+  </div>
+
+  <!-- ✅ Add this search form -->
+  <form action="#" class="search-form" onsubmit="return handleSearch(event)">
+    <input type="search" id="search-box" placeholder="Search products..." />
+    <label for="search-box" class="fas fa-search" id="search-icon"></label>
+  </form>
+</header>
+<!-- Header Section Ends -->
+
+
+<!-- review section starts  -->
+
+<section class="review" id="review">
+    <br>
+    <br>
+    <br>
+    <br>
+    <h1 class="heading"> customer's <span>review</span> </h1>
+
+    <div class="swiper review-slider">
+
+        <div class="swiper-wrapper">
+
+            <div class="swiper-slide box">
+                <img src="image/NPI.jpg" alt="">
+                <p>Definitely ordering again soon!</p>
+                <h3>Harsh</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+            </div>
+
+            <div class="swiper-slide box">
+                <img src="image/NPI.jpg" alt="">
+                <p>User-friendly interface and quick delivery. My family enjoyed the biryani—it was flavorful and perfectly cooked!</p>
+                <h3>john</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+            </div>
+
+            <div class="swiper-slide box">
+                <img src="image/NPI.jpg" alt="">
+                <p>Great experience! The food was delicious and arrived right on time. Highly recommend this site to everyone.</p>
+                <h3>ajay</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+            </div>
+
+            <div class="swiper-slide box">
+                <img src="image/NPI.jpg" alt="">
+                <p>Super easy to order! Food arrived hot and fresh.</p>
+                <h3>Viraj</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+            <div id="reviewPopup" class="popup">
+        <div class="popup-content">
+            <span id="closePopup" class="close">&times;</span>
+            <h3>Rate Our Website</h3>
+            <br>
+            <div class="stars" id="starRating">
+            <i class="far fa-star" data-value="1"></i>
+            <i class="far fa-star" data-value="2"></i>
+            <i class="far fa-star" data-value="3"></i>
+            <i class="far fa-star" data-value="4"></i>
+            <i class="far fa-star" data-value="5"></i>
+            </div>
+            <textarea id="reviewText" placeholder="Write your review..."></textarea>
+            <button class="btn" onclick="submitReview()">Submit Review</button>
+        </div>
+        </div>
+
+        <div id="allReviews" class="review-section">
+        <h3>User Reviews</h3>
+        <div id="reviewsList"></div>
+        </div>
+
+</section>
+
+<!-- review section ends -->
+
+<!-- footer section starts  -->
+
+<section class="footer">
+
+    <div class="box-container">
+            <div class="box">
+            <h3>contact info</h3>
+            <a href="#" class="links"> <i class="fas fa-phone"></i> +919760616390</a>
+            <a href="#" class="links"> <i class="fas fa-phone"></i> +919654668844 </a>
+            <a href="#" class="links"> <i class="fas fa-envelope"></i> xyz@gmail.com </a>
+            <a href="#" class="links"> <i class="fas fa-map-marker-alt"></i> Delhi, india - 110092 </a>
+        </div>
+
+        <div class="box">
+            <h3>quick links</h3>
+            <a href="#" class="links"> <i class="fas fa-arrow-right"></i> home </a>
+            <a href="#" class="links"> <i class="fas fa-arrow-right"></i> features </a>
+            <a href="#" class="links"> <i class="fas fa-arrow-right"></i> products </a>
+            <a href="#" class="links"> <i class="fas fa-arrow-right"></i> categories </a>
+            <a href="#" class="links"> <i class="fas fa-arrow-right"></i> review </a>
+            <a href="#" class="links"> <i class="fas fa-arrow-right"></i> recipes </a>
+        </div>
+
+        <div class="box">
+            <h3>newsletter</h3>
+            <p>subscribe for latest updates</p>
+            <input type="email" placeholder="your email" class="email">
+            <input type="submit" value="subscribe" class="btn">
+            <img src="image/payment.png" class="payment-img" alt="">
+        </div>
+        <div class="box">
+            <div class="share">
+                <a target="_blank" href="#" class="fab fa-facebook-f"> </a>
+                <a href="#" class="fab fa-twitter"></a>
+                <a href="#" class="fab fa-instagram"></a>
+                <a href="#" class="fab fa-linkedin"></a>
+            </div>
+        </div>
+    </div>
+
+
+</section>
+
+<!-- footer section ends -->
+<!-- JS Scripts -->
+<script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+<script src="js/script.js"></script>
+<script>
+  const popup = document.getElementById("reviewPopup");
+  const reviewBtn = document.getElementById("review-btn");
+  const closeBtn = document.getElementById("closePopup");
+  const stars = document.querySelectorAll("#starRating i");
+  let selectedRating = 0;
+
+  reviewBtn.onclick = () => popup.style.display = "block";
+  closeBtn.onclick = () => popup.style.display = "none";
+  window.onclick = (e) => { if (e.target == popup) popup.style.display = "none"; }
+
+  stars.forEach(star => {
+    star.addEventListener("click", () => {
+      selectedRating = parseInt(star.dataset.value);
+      stars.forEach(s => s.classList.remove("selected"));
+      for (let i = 0; i < selectedRating; i++) stars[i].classList.add("selected");
+    });
+  });
+
+  function submitReview() {
+    const text = document.getElementById("reviewText").value;
+    if (selectedRating === 0 || text.trim() === "") {
+      alert("Please rate and write a review.");
+      return;
+    }
+    const reviewList = document.getElementById("reviewsList");
+    const box = document.createElement("div");
+    box.classList.add("review-box");
+    box.innerHTML = `<p>${"⭐".repeat(selectedRating)}</p><p>${text}</p>`;
+    reviewList.prepend(box);
+    popup.style.display = "none";
+    document.getElementById("reviewText").value = "";
+    stars.forEach(s => s.classList.remove("selected"));
+    selectedRating = 0;
+  }
+  var swiper = new Swiper(".review-slider", {
+  loop: true,
+  spaceBetween: 20,
+  autoplay: {
+    delay: 3500,
+    disableOnInteraction: false,
+  },
+  breakpoints: {
+    0: { slidesPerView: 1 },
+    768: { slidesPerView: 2 },
+    991: { slidesPerView: 3 },
+  },
+});
+
+// Force Swiper to recalculate layout in case icons or layout changes affect it
+setTimeout(() => {
+  swiper.update();
+  window.dispatchEvent(new Event('resize'));
+}, 100);
+
+</script>
+<script>
+  function handleSearch(event) {
+    event.preventDefault();
+    const query = document.getElementById("search-box").value.trim().toLowerCase();
+    if (query) {
+      window.location.href = "search.html?query=" + encodeURIComponent(query);
+    }
+    return false;
+  }
+</script>
+
+</body>
+</html>

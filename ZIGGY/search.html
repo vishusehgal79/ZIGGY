@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Search Results - Ziggy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+  <style>
+    /* Back to categories button styles */
+    .back-button {
+      text-align: right;
+      margin: 2rem 2rem 0 0;
+    }
+
+    .back-button .btn {
+      padding: 0.8rem 2rem;
+      font-size: 1.3rem;
+      border: 2px solid #0a013a;
+      border-radius: 8px;
+      color: #0a013a;
+      background: transparent;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .back-button .btn:hover {
+      background-color: #0a013a;
+      color: #fff;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <a href="#" class="logo"><i class="fas fa-shopping-basket"></i> Ziggy</a>
+  <nav class="navbar">
+    <a href="index.html">home</a>
+    <a href="categories.html">categories</a>
+    <a href="products.html">products</a>
+  </nav>
+
+  <form class="search-form" onsubmit="return handleSearch(event)">
+    <input type="search" id="search-box" placeholder="Search products..." />
+    <label for="search-box" class="fas fa-search" id="search-icon"></label>
+  </form>
+</header>
+
+<section class="products">
+  <div class="search-results-container">
+    <div class="back-button">
+      <a href="categories.html" class="btn">← Back to Categories</a>
+    </div>
+
+    <h1 class="heading">search <span>results</span></h1>
+
+    <div class="box-container" id="results"></div>
+  </div>
+</section>
+
+
+<!-- ✅ JS to redirect search to this page -->
+<script>
+  function handleSearch(event) {
+    event.preventDefault();
+    const query = document.getElementById("search-box").value.trim().toLowerCase();
+    if (query) {
+      window.location.href = "search.html?query=" + encodeURIComponent(query);
+    }
+    return false;
+  }
+</script>
+
+<!-- ✅ JS to load the searched product -->
+<script>
+  const products = [
+    // 🥦 Vegetables
+    { name: "potato", image: "image/potato1.jpg", price: "₹35", category: "Vegetables" },
+    { name: "lady finger", image: "image/ladyfing.jpg", price: "₹40", category: "Vegetables" },
+    { name: "capsicum", image: "image/capsicum.jpg", price: "₹45", category: "Vegetables" },
+    { name: "carrot", image: "image/carrot.jpg", price: "₹30", category: "Vegetables" },
+
+    // 🍎 Fruits
+    { name: "apple", image: "image/apple.jpg", price: "₹120", category: "Fruits" },
+    { name: "banana", image: "image/banana.jpg", price: "₹40", category: "Fruits" },
+    { name: "lemon", image: "image/lemon.jpg", price: "₹30", category: "Fruits" },
+    { name: "mango", image: "image/mango.jpg", price: "₹80", category: "Fruits" },
+
+    // 🥛 Dairy Products
+    { name: "milk", image: "image/milk.jpg", price: "₹5o", category: "Dairy" },
+    { name: "paneer", image: "image/paneer.jpg", price: "₹100", category: "Dairy" },
+    { name: "cheese", image: "image/cheese.jpg", price: "₹120", category: "Dairy" },
+    { name: "curd", image: "image/curd.jpg", price: "₹50", category: "Dairy" },
+
+    // 🍗 Meat
+    { name: "chicken", image: "image/chicken.jpg", price: "₹220", category: "Meat" },
+    { name: "fish", image: "image/fish.jpg", price: "₹260", category: "Meat" },
+    { name: "mutton", image: "image/mutton.jpg", price: "₹350", category: "Meat" },
+    { name: "prawns", image: "image/prawns.jpg", price: "₹300", category: "Meat" },
+
+    // 🍲 Homestyle Meals
+    { name: "rajma chawal", image: "image/rajma-chawal.jpg", price: "₹159", category: "Meals" },
+    { name: "matar paneer", image: "image/matar-paneer-1.jpg", price: "₹210", category: "Meals" },
+    { name: "kadhi chawal", image: "image/kadhi-chawal.jpg", price: "₹170", category: "Meals" },
+    { name: "mix veg", image: "image/mix-veg.jpg", price: "₹195", category: "Meals" }
+  ];
+
+  const params = new URLSearchParams(window.location.search);
+  const query = params.get("query")?.toLowerCase();
+  const resultContainer = document.getElementById("results");
+
+  if (query) {
+    const matchingProducts = products.filter(product =>
+      product.name.toLowerCase().includes(query)
+    );
+
+    if (matchingProducts.length > 0) {
+      resultContainer.innerHTML = matchingProducts.map(product => `
+        <div class="box">
+          <img src="${product.image}" alt="${product.name}" />
+          <h3>${product.name}</h3>
+          <p>Category: ${product.category}</p>
+          <div class="price">${product.price}</div>
+          <button class="btn" onclick="addToCart('${product.name}', '${product.price}', '${product.image}')">
+            Add to Cart
+          </button>
+        </div>
+      `).join('');
+    } else {
+      resultContainer.innerHTML = `<h2 style="text-align:center;">No product found for "${query}"</h2>`;
+    }
+  } else {
+    resultContainer.innerHTML = `<h2 style="text-align:center;">No search keyword provided.</h2>`;
+  }
+
+  function addToCart(name, price, image) {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    cart.push({ name, price, image });
+    localStorage.setItem("cart", JSON.stringify(cart));
+    alert(`${name} has been added to your cart!`);
+  }
+</script>
+
+
+<!-- ✅ JS to add item to localStorage cart -->
+<script>
+  function addToCart(name, price, image) {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    cart.push({ name, price, image });
+    localStorage.setItem("cart", JSON.stringify(cart));
+    alert(`${name} has been added to your cart!`);
+  }
+</script>
+<script>
+function fetchRecommendations(productName) {
+  fetch("http://127.0.0.1:5000/recommend", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ product: productName })
+  })
+  .then(res => res.json())
+  .then(data => {
+    const div = document.createElement("div");
+    div.innerHTML = "<h2>Recommended for you:</h2>" + data.map(p => `
+      <p>${p.name}</p>
+    `).join('');
+    document.body.appendChild(div);
+  });
+}
+
+// Example: after a product is shown
+fetchRecommendations("paneer");
+</script>
+
+</body>
+</html>

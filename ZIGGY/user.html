@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ziggy - User Login</title>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .user-form {
+      max-width: 500px;
+      margin: 60px auto;
+      padding: 30px;
+      background: #f9f9f9;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .user-form h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .user-form input, .user-form select {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .btn {
+      background-color: #ff7800;
+      color: white;
+      padding: 12px;
+      width: 100%;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background-color: #e76c00;
+    }
+  </style>
+</head>
+<body>
+
+  <section class="user-form">
+    <h2>User Login</h2>
+    <button onclick="googleLogin()" class="btn">Login with Google</button>
+
+    <form id="userForm" style="display:none;">
+      <input type="text" id="name" placeholder="Full Name" required />
+      <input type="email" id="email" placeholder="Email" readonly />
+      <input type="text" id="phone" placeholder="Phone Number" />
+      <input type="text" id="address" placeholder="Address" />
+      <select id="city">
+        <option value="">Select City</option>
+        <option>Delhi</option>
+        <option>Mumbai</option>
+        <option>Chennai</option>
+      </select>
+      <input type="submit" value="Save Details" class="btn" />
+    </form>
+  </section>
+
+ <script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyBYuz8RB9YdTP31RGpLB8f8LIKMvNyWahI",
+    authDomain: "ziggy-70a74.firebaseapp.com",
+    projectId: "ziggy-70a74",
+    storageBucket: "ziggy-70a74.appspot.com",
+    messagingSenderId: "287849007602",
+    appId: "1:287849007602:web:83b9db5a1e80d5c191036b"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+
+  let currentUser = null;
+
+  // Login Function
+  function googleLogin() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider)
+      .then(result => {
+        currentUser = result.user;
+        document.getElementById("email").value = currentUser.email;
+        document.getElementById("name").value = currentUser.displayName;
+        document.getElementById("userForm").style.display = "block";
+      })
+      .catch(error => alert("Login Failed: " + error.message));
+  }
+
+  // Ensure currentUser is available after page load
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      currentUser = user;
+    }
+  });
+
+  // Save form data
+  document.getElementById("userForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    if (!currentUser) {
+      alert("User not logged in");
+      return;
+    }
+
+    const userData = {
+      name: document.getElementById("name").value,
+      email: document.getElementById("email").value,
+      phone: document.getElementById("phone").value,
+      address: document.getElementById("address").value,
+      city: document.getElementById("city").value
+    };
+
+    db.collection("users").doc(currentUser.uid).set(userData)
+      .then(() => {
+        alert("Profile saved!");
+        window.location.href = "profile.html";
+      })
+      .catch(err => alert("Error saving data: " + err.message));
+  });
+</script>
+
+</body>
+</html>

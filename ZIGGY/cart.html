@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ziggy - Cart</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f7f7f7;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .cart-container {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #ddd;
+      padding: 10px 0;
+    }
+
+    .cart-item img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-right: 10px;
+    }
+
+    .cart-details {
+      flex-grow: 1;
+      padding-left: 10px;
+    }
+
+    .cart-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .quantity-btn {
+      padding: 5px 10px;
+      cursor: pointer;
+      font-size: 16px;
+      border: none;
+      background: #0d5d2c98;
+      color: white;
+      border-radius: 4px;
+    }
+
+    .remove-btn {
+      color: red;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .total {
+      text-align: right;
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .empty {
+      text-align: center;
+      font-size: 18px;
+      color: gray;
+      padding: 50px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Your Cart</h1>
+  <a href="categories.html" class="btn" style="margin: 1rem 0; display: inline-block;">← Back to Categories</a>
+  <div class="cart-container" id="cartContainer"></div>
+  <div class="cart-buttons" style="margin-top: 2rem; display: flex; gap: 1rem;">
+  <button id="clear-cart" class="btn">Clear Cart</button>
+  <button id="place-order" class="btn">Place Order</button>
+  </div>
+
+  <div class="total" id="cartTotal"></div>
+
+  <script>
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    const container = document.getElementById("cartContainer");
+    const totalDisplay = document.getElementById("cartTotal");
+
+    function saveCart() {
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }
+
+    function updateCartHTML() {
+      container.innerHTML = "";
+      if (cart.length === 0) {
+        container.innerHTML = "<div class='empty'>Your cart is empty</div>";
+        totalDisplay.textContent = "";
+        return;
+      }
+
+      let totalPrice = 0;
+
+      cart.forEach((item, index) => {
+        const itemTotal = item.price * item.quantity;
+        totalPrice += itemTotal;
+
+        const itemDiv = document.createElement("div");
+        itemDiv.classList.add("cart-item");
+
+        itemDiv.innerHTML = `
+          <img src="${item.image}" alt="${item.name}">
+          <div class="cart-details">
+            <h3>${item.name}</h3>
+            <p>₹${item.price} × ${item.quantity} = ₹${itemTotal}</p>
+          </div>
+          <div class="cart-actions">
+            <button class="quantity-btn" onclick="changeQuantity(${index}, -1)">−</button>
+            <button class="quantity-btn" onclick="changeQuantity(${index}, 1)">+</button>
+            <i class="fas fa-trash remove-btn" onclick="removeItem(${index})"></i>
+          </div>
+        `;
+
+        container.appendChild(itemDiv);
+      });
+
+      totalDisplay.textContent = `Total: ₹${totalPrice}`;
+    }
+
+    function changeQuantity(index, delta) {
+      cart[index].quantity += delta;
+      if (cart[index].quantity <= 0) {
+        cart.splice(index, 1);
+      }
+      saveCart();
+      updateCartHTML();
+    }
+
+    function removeItem(index) {
+      cart.splice(index, 1);
+      saveCart();
+      updateCartHTML();
+    }
+
+    updateCartHTML();
+  </script>
+  <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

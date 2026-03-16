@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ziggy - Profile</title>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #a3c9ab;
+  }
+
+  .profile-box {
+    max-width: 500px;
+    margin: 60px auto;
+    padding: 30px 40px;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  .profile-box:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+
+  .profile-box h2 {
+    font-size: 26px;
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  .profile-box h3 {
+    font-size: 18px;
+    margin: 10px 0;
+    color: #444;
+    text-align: left;
+  }
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.back-btn {
+  background-color: #69a476;
+  color: #333333;
+}
+
+.back-btn:hover {
+  background-color: #bbb;
+}
+
+.logout-btn {
+  background-color: #ccc;
+}
+
+.logout-btn:hover {
+  background-color: #bbb;
+}
+
+</style>
+
+</head>
+<body>
+
+  <section class="profile-box">
+    <h2>Welcome to Your Profile</h2>
+    <div id="profileInfo">Loading user details...</div>
+    <div class="button-group">
+    <a href="index.html" class="btn back-btn">Back to Home</a>
+    <button onclick="logout()" class="btn logout-btn">Logout</button>
+    </div>
+
+  </section>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBYuz8RB9YdTP31RGpLB8f8LIKMvNyWahI",
+      authDomain: "ziggy-70a74.firebaseapp.com",
+      projectId: "ziggy-70a74",
+      storageBucket: "ziggy-70a74.appspot.com",
+      messagingSenderId: "287849007602",
+      appId: "1:287849007602:web:83b9db5a1e80d5c191036b"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        db.collection("users").doc(user.uid).get().then(doc => {
+          if (doc.exists) {
+            const data = doc.data();
+            document.getElementById("profileInfo").innerHTML = `
+              <h3><strong>Name:</strong> ${data.name || "N/A"}</h3>
+              <h3><strong>Email:</strong> ${data.email || "N/A"}</h3>
+              <h3><strong>Phone:</strong> ${data.phone || "N/A"}</h3>
+              <h3><strong>Address:</strong> ${data.address || "N/A"}</h3>
+              <h3><strong>City:</strong> ${data.city || "N/A"}</h3>
+            `;
+          } else {
+            document.getElementById("profileInfo").innerHTML = `
+              <p>No profile data found. Please <a href="user.html">complete your profile here</a>.</p>
+            `;
+          }
+        }).catch(err => {
+          document.getElementById("profileInfo").innerText = "Error fetching profile: " + err.message;
+        });
+      } else {
+        window.location.href = "user.html"; // Redirect if not logged in
+      }
+    });
+
+    function logout() {
+      auth.signOut().then(() => {
+        window.location.href = "user.html";
+      });
+    }
+  </script>
+</body>
+</html>

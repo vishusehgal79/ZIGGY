@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ziggy - Food Ordering Website</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Header Section Starts -->
+<header class="header">
+  <a href="#" class="logo"> <i class="fas fa-shopping-basket"></i> Ziggy </a>
+
+  <nav class="navbar">
+    <a href="index.html">home</a>
+    <a href="categories.html">categories</a>
+    <a href="products.html">products</a>
+    <a href="review.html">review</a>
+    <a href="recipes.html">recipes</a>
+  </nav>
+
+  <div class="icons">
+    <div class="fas fa-bars" id="menu-btn"></div>
+    <div class="fas fa-search" id="search-btn"></div>
+    <a href="cart.html"><div class="fas fa-shopping-cart" id="cart-btn"></div></a>
+    <div class="fas fa-user" id="login-btn"></div> 
+  </div>
+
+  <!-- ✅ Add this search form -->
+  <form action="#" class="search-form" onsubmit="return handleSearch(event)">
+    <input type="search" id="search-box" placeholder="Search products..." />
+    <label for="search-box" class="fas fa-search" id="search-icon"></label>
+  </form>
+</header>
+<!-- Header Section Ends -->
+
+
+<!-- Home Section Starts -->
+<section class="home" id="home">
+  <div class="content">
+    <h3>fresh and <span>organic</span> products for your</h3>
+    <p>Experience the goodness of handpicked, farm-fresh produce. Eat healthy, live better — straight from our fields to your plate.</p>
+    <a href="categories.html" class="btn">shop now</a>
+  </div>
+</section>
+<!-- Home Section Ends -->
+
+<!-- Footer Section Starts -->
+<section class="footer">
+  <div class="box-container">
+
+    <div class="box">
+      <h3>contact info</h3>
+      <a href="#" class="links"><i class="fas fa-phone"></i> +919760616390</a>
+      <a href="#" class="links"><i class="fas fa-phone"></i> +919654668844</a>
+      <a href="#" class="links"><i class="fas fa-envelope"></i> xyz@gmail.com</a>
+      <a href="#" class="links"><i class="fas fa-map-marker-alt"></i> Delhi, India - 110092</a>
+    </div>
+
+    <div class="box">
+      <h3>quick links</h3>
+      <a href="#" class="links"><i class="fas fa-arrow-right"></i> home</a>
+      <a href="#" class="links"><i class="fas fa-arrow-right"></i> features</a>
+      <a href="#" class="links"><i class="fas fa-arrow-right"></i> products</a>
+      <a href="#" class="links"><i class="fas fa-arrow-right"></i> categories</a>
+      <a href="#" class="links"><i class="fas fa-arrow-right"></i> review</a>
+      <a href="#" class="links"><i class="fas fa-arrow-right"></i> recipes</a>
+    </div>
+
+    <div class="box">
+      <h3>newsletter</h3>
+      <p>subscribe for latest updates</p>
+      <input type="email" placeholder="your email" class="email">
+      <input type="submit" value="subscribe" class="btn">
+      <img src="image/payment.png" class="payment-img" alt="">
+    </div>
+
+    <div class="box">
+      <div class="share">
+        <a href="#" class="fab fa-facebook-f"></a>
+        <a href="#" class="fab fa-twitter"></a>
+        <a href="#" class="fab fa-instagram"></a>
+        <a href="#" class="fab fa-linkedin"></a>
+      </div>
+    </div>
+
+  </div>
+</section>
+<!-- Footer Section Ends -->
+
+<!-- JS Scripts -->
+<script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+<script src="js/script.js"></script>
+
+<!-- Firebase + Redirect Script -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyBYuz8RB9YdTP31RGpLB8f8LIKMvNyWahI",
+    authDomain: "ziggy-70a74.firebaseapp.com",
+    projectId: "ziggy-70a74",
+    storageBucket: "ziggy-70a74.appspot.com",
+    messagingSenderId: "287849007602",
+    appId: "1:287849007602:web:83b9db5a1e80d5c191036b",
+    measurementId: "G-SF2E1RT0HJ"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+
+  document.getElementById("login-btn").addEventListener("click", () => {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        window.location.href = "profile.html"; // If logged in
+      } else {
+        window.location.href = "user.html";    // If not logged in
+      }
+    });
+  });
+</script>
+<script>
+  function handleSearch(event) {
+    event.preventDefault();
+    const query = document.getElementById("search-box").value.trim().toLowerCase();
+    if (query) {
+      window.location.href = "search.html?query=" + encodeURIComponent(query);
+    }
+    return false;
+  }
+</script>
+<script>
+  function handleSearch(event) {
+    event.preventDefault();
+    const query = document.getElementById("search-box").value.trim().toLowerCase();
+    if (query) {
+      window.location.href = "search.html?query=" + encodeURIComponent(query);
+    }
+    return false;
+  }
+
+  const products = [
+    { name: "apple", image: "image/apple.jpg", price: "₹120", category: "Fruits" },
+    { name: "milk", image: "image/milk.jpg", price: "₹55", category: "Dairy" },
+    { name: "chicken", image: "image/chicken.jpg", price: "₹220", category: "Meat" },
+    { name: "rajma chawal", image: "image/rajma.jpg", price: "₹99", category: "Meals" }
+    // 👉 Add more here if needed
+  ];
+
+  const params = new URLSearchParams(window.location.search);
+  const query = params.get("query")?.toLowerCase();
+  const resultContainer = document.getElementById("results");
+
+  const foundProduct = products.find(product =>
+    product.name.toLowerCase().includes(query)
+  );
+
+  if (foundProduct) {
+    resultContainer.innerHTML = `
+      <div class="box">
+        <img src="${foundProduct.image}" alt="${foundProduct.name}" />
+        <h3>${foundProduct.name}</h3>
+        <p>Category: ${foundProduct.category}</p>
+        <div class="price">${foundProduct.price}</div>
+        <a href="#" class="btn">Add to Cart</a>
+      </div>
+    `;
+  } else {
+    resultContainer.innerHTML = `<h2 style="text-align:center;">No product found for "${query}"</h2>`;
+  }
+</script>
+
+
+</body>
+</html>

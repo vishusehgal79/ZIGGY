@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ziggy - Meat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+
+<header class="header">
+  <a href="#" class="logo"><i class="fas fa-shopping-basket"></i> Ziggy</a>
+  <nav class="navbar">
+    <a href="index.html">home</a>
+    <a href="categories.html">categories</a>
+    <a href="products.html">products</a>
+    <a href="review.html">review</a>
+    <a href="recipes.html">recipes</a>
+  </nav>
+
+  <div class="icons">
+    <div class="fas fa-bars" id="menu-btn"></div>
+    <div class="fas fa-search" id="search-btn"></div>
+    <a href="cart.html"><div class="fas fa-shopping-cart" id="cart-btn"></div></a>
+    <div class="fas fa-user" id="login-btn"></div>
+  </div>
+</header>
+
+<section class="products">
+  <br><br><br><br>
+  <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    <h1 class="heading">fresh meat <span>category</span></h1>
+    <a href="categories.html" class="btn" style="margin-top: 1rem;">← Back to Categories</a>
+  </div>
+
+  <div class="swiper product-slider">
+    <div class="swiper-wrapper">
+
+      <!-- 🍗 Chicken -->
+      <div class="swiper-slide box">
+        <img src="image/chicken.jpg" alt="Chicken">
+        <h3>Chicken</h3>
+        <div class="price">&#8377 220/-</div>
+        <div class="stars">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i>
+          <i class="fas fa-star"></i><i class="fas fa-star"></i>
+          <i class="fas fa-star-half-alt"></i>
+        </div>
+        <a href="#" class="btn add-to-cart" data-name="Chicken" data-price="220" data-image="image/chicken.jpg">add to cart</a>
+      </div>
+
+      <!-- 🐐 Mutton -->
+      <div class="swiper-slide box">
+        <img src="image/mutton.jpg" alt="Mutton">
+        <h3>Mutton</h3>
+        <div class="price">&#8377 580/-</div>
+        <div class="stars">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i>
+          <i class="fas fa-star"></i><i class="fas fa-star"></i>
+          <i class="fas fa-star-half-alt"></i>
+        </div>
+        <a href="#" class="btn add-to-cart" data-name="Mutton" data-price="580" data-image="image/mutton.jpg">add to cart</a>
+      </div>
+
+      <!-- 🐟 Fish -->
+      <div class="swiper-slide box">
+        <img src="image/fish.jpg" alt="Fish">
+        <h3>Fish</h3>
+        <div class="price">&#8377 300/-</div>
+        <div class="stars">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i>
+          <i class="fas fa-star"></i><i class="fas fa-star"></i>
+          <i class="fas fa-star-half-alt"></i>
+        </div>
+        <a href="#" class="btn add-to-cart" data-name="Fish" data-price="300" data-image="image/fish.jpg">add to cart</a>
+      </div>
+
+      <!-- 🦐 Prawns -->
+      <div class="swiper-slide box">
+        <img src="image/prawns.jpg" alt="Prawns">
+        <h3>Prawns</h3>
+        <div class="price">&#8377 450/-</div>
+        <div class="stars">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i>
+          <i class="fas fa-star"></i><i class="fas fa-star"></i>
+          <i class="fas fa-star-half-alt"></i>
+        </div>
+        <a href="#" class="btn add-to-cart" data-name="Prawns" data-price="450" data-image="image/prawns.jpg">add to cart</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="footer">
+  <div class="credit">© 2025 Ziggy — All rights reserved.</div>
+</section>
+
+<!-- ✅ JS Swiper Scripts -->
+<script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+
+<script>
+  var swiper = new Swiper(".product-slider", {
+    loop: true,
+    spaceBetween: 20,
+    autoplay: {
+      delay: 4000,
+      disableOnInteraction: false,
+    },
+    breakpoints: {
+      0: { slidesPerView: 1 },
+      576: { slidesPerView: 2 },
+      768: { slidesPerView: 3 },
+      1024: { slidesPerView: 4 },
+    },
+  });
+</script>
+
+<!-- Firebase + Redirect Script -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyBYuz8RB9YdTP31RGpLB8f8LIKMvNyWahI",
+    authDomain: "ziggy-70a74.firebaseapp.com",
+    projectId: "ziggy-70a74",
+    storageBucket: "ziggy-70a74.appspot.com",
+    messagingSenderId: "287849007602",
+    appId: "1:287849007602:web:83b9db5a1e80d5c191036b",
+    measurementId: "G-SF2E1RT0HJ"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+
+  document.getElementById("login-btn").addEventListener("click", () => {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        window.location.href = "profile.html";
+      } else {
+        window.location.href = "user.html";
+      }
+    });
+  });
+</script>
+<script src="js/script.js"></script>
+</body>
+</html>
